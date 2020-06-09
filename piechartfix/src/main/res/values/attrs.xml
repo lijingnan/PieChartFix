@@ -2,5 +2,6 @@
 <resources>
     <declare-styleable name="PieChartFix">
         <attr name="chart_auto_adapt_text_size" format="boolean" />
+        <attr name="chart_line_color_with_pie" format="boolean" />
     </declare-styleable>
 </resources>

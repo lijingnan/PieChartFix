@@ -50,6 +50,7 @@
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:layout_marginTop="10dp"
-            app:chart_auto_adapt_text_size="true" />
+            app:chart_auto_adapt_text_size="true"
+            app:chart_line_color_with_pie="true"/>
     </LinearLayout>
 </LinearLayout>

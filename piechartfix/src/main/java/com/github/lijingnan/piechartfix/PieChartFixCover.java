@@ -30,8 +30,11 @@ public class PieChartFixCover extends PieChart {
         if (attrs != null) {
             @SuppressLint("CustomViewStyleable") TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.PieChartFix);
             boolean auto_adapt_text_size = a.getBoolean(R.styleable.PieChartFix_chart_auto_adapt_text_size, false);
+            boolean line_color_with_pie = a.getBoolean(R.styleable.PieChartFix_chart_line_color_with_pie, false);
             a.recycle();
-            ((PieChartRendererFixCover) mRenderer).setAuto_adapt_text_size(auto_adapt_text_size);
+            ((PieChartRendererFixCover) mRenderer)
+                    .setAuto_adapt_text_size(auto_adapt_text_size)
+                    .setLine_color_with_pie(line_color_with_pie);
         }
     }
 

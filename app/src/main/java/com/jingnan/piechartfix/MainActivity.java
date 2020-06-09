@@ -92,24 +92,39 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //            entries.add(pieEntry);
 //        }
-        entries.add(new PieEntry(1F, parties[0]));
-        entries.add(new PieEntry(1F, parties[6]));
-        entries.add(new PieEntry(1F, parties[7]));
-        entries.add(new PieEntry(80F, parties[8]));
-        entries.add(new PieEntry(1F, parties[9]));
-        entries.add(new PieEntry(1F, parties[1]));
-        entries.add(new PieEntry(1F, parties[2]));
-        entries.add(new PieEntry(1F, parties[3]));
-        entries.add(new PieEntry(1F, parties[4]));
-        entries.add(new PieEntry(80F, parties[5]));
 
-//        entries.add(new PieEntry(4.96f, "电炉异形"));
-//        entries.add(new PieEntry(12.6611f, "破碎料类"));
-//        entries.add(new PieEntry(23.33f, "08铝类"));
-//        entries.add(new PieEntry(66.3f, "压块类"));
-//        entries.add(new PieEntry(430.8f, "废优质小型料"));
-//        entries.add(new PieEntry(7467.166f, "废钢"));
-//        entries.add(new PieEntry(47739.895f, "钢筋类"));
+//        entries.add(new PieEntry(1F, parties[0]));
+//        entries.add(new PieEntry(1F, parties[6]));
+//        entries.add(new PieEntry(1F, parties[7]));
+//        entries.add(new PieEntry(80F, parties[8]));
+//        entries.add(new PieEntry(1F, parties[9]));
+//        entries.add(new PieEntry(1F, parties[1]));
+//        entries.add(new PieEntry(1F, parties[2]));
+//        entries.add(new PieEntry(1F, parties[3]));
+//        entries.add(new PieEntry(1F, parties[4]));
+//        entries.add(new PieEntry(80F, parties[5]));
+
+//        entries.add(new PieEntry(1708.220f, "08铝类"));
+//        entries.add(new PieEntry(1708.220f, "08铝类"));
+//        entries.add(new PieEntry(1708.220f, "08铝类"));
+//        entries.add(new PieEntry(1708.220f, "08铝类"));
+//        entries.add(new PieEntry(1708.220f, "08铝类"));
+//        entries.add(new PieEntry(1708.220f, "08铝类"));
+//        entries.add(new PieEntry(1708.220f, "08铝类"));
+//        entries.add(new PieEntry(1708.220f, "08铝类"));
+        entries.add(new PieEntry(1708.220f, "08铝类"));
+        entries.add(new PieEntry(1708.220f, "08铝类"));
+        entries.add(new PieEntry(1708.220f, "08铝类"));
+        entries.add(new PieEntry(1912.7050f, "破碎废钢"));
+        entries.add(new PieEntry(4844.440f, "工业料类"));
+        entries.add(new PieEntry(5639.9790f, "其他"));
+        entries.add(new PieEntry(6431.230f, "中型废钢类"));
+        entries.add(new PieEntry(9180.1350f, "冲豆、冲料..."));
+        entries.add(new PieEntry(28491.40f, "破碎料类"));
+        entries.add(new PieEntry(60058.5230f, "废钢"));
+        entries.add(new PieEntry(116619.750f, "钢筋类"));
+        entries.add(new PieEntry(230772.69f, "压块类"));
+        entries.add(new PieEntry(266247.78f, "重型废钢类"));
 
         PieDataSet dataSet = new PieDataSet(entries, "");
         dataSet.setSliceSpace(3f);//设置饼块之间的间隔

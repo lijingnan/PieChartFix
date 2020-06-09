@@ -1,9 +1,11 @@
 package com.github.lijingnan.piechartfix;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
+import android.view.View;
 
 import com.github.mikephil.charting.animation.ChartAnimator;
 import com.github.mikephil.charting.charts.PieChart;
@@ -18,6 +20,7 @@ import com.github.mikephil.charting.utils.MPPointF;
 import com.github.mikephil.charting.utils.Utils;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PieChartRendererFixCover extends PieChartRenderer {
@@ -25,6 +28,8 @@ public class PieChartRendererFixCover extends PieChartRenderer {
     private boolean auto_adapt_text_size;
     private int measuredHeight;
     private float topAndBottomSpace;
+    private List<Integer> colors;
+    private boolean line_color_with_pie;
 
     PieChartRendererFixCover(PieChart chart, ChartAnimator animator, ViewPortHandler viewPortHandler) {
         super(chart, animator, viewPortHandler);
@@ -32,6 +37,11 @@ public class PieChartRendererFixCover extends PieChartRenderer {
 
     PieChartRendererFixCover setAuto_adapt_text_size(boolean auto_adapt_text_size) {
         this.auto_adapt_text_size = auto_adapt_text_size;
+        return this;
+    }
+
+    PieChartRendererFixCover setLine_color_with_pie(boolean line_color_with_pie) {
+        this.line_color_with_pie = line_color_with_pie;
         return this;
     }
 
@@ -68,6 +78,7 @@ public class PieChartRendererFixCover extends PieChartRenderer {
         }
         final float labelRadius = radius - labelRadiusOffset;
         PieData data = mChart.getData();
+        data.getColors();
         List<IPieDataSet> dataSets = data.getDataSets();
         float yValueSum = data.getYValueSum();
         boolean drawEntryLabels = mChart.isDrawEntryLabelsEnabled();
@@ -75,7 +86,7 @@ public class PieChartRendererFixCover extends PieChartRenderer {
         int xIndex = 0;
         c.save();
         float offset = Utils.convertDpToPixel(5.f);
-        for (int i = 0; i < dataSets.size(); i++) {
+        for (int i = 0, size = dataSets.size(); i < size; i++) {
             IPieDataSet dataSet = dataSets.get(i);
             final boolean drawValues = dataSet.isDrawValuesEnabled();
             if (!drawValues && !drawEntryLabels)
@@ -85,10 +96,22 @@ public class PieChartRendererFixCover extends PieChartRenderer {
             applyValueTextStyle(dataSet);
             float lineHeight = Utils.calcTextHeight(mValuePaint, "Q")
                     + Utils.convertDpToPixel(4f);
+            println("lineHeight = " + lineHeight);
             IValueFormatter formatter = dataSet.getValueFormatter();
             int entryCount = dataSet.getEntryCount();
-            mValueLinePaint.setColor(dataSet.getValueLineColor());
             mValueLinePaint.setStrokeWidth(Utils.convertDpToPixel(dataSet.getValueLineWidth()));
+            if (line_color_with_pie) {
+                colors = dataSet.getColors();
+                if (colors == null || colors.size() == 0) {
+                    colors = new ArrayList<>();
+                    for (int color : ColorTemplate.JOYFUL_COLORS) {
+                        colors.add(color);
+                    }
+                }
+            } else {
+                mValueLinePaint.setColor(dataSet.getValueLineColor());
+
+            }
             final float sliceSpace = getSliceSpace(dataSet);
             MPPointF iconsOffset = MPPointF.getInstance(dataSet.getIconsOffset());
             iconsOffset.x = Utils.convertDpToPixel(iconsOffset.x);
@@ -127,6 +150,8 @@ public class PieChartRendererFixCover extends PieChartRenderer {
             float leftSpace = (leftCount > 1) ? radius * 2 / (leftCount - 1) : radius / 2;
             int tempRightIndex = 0;
             int tempLeftIndex = 0;
+            int lastRightPt2y = 0;
+            int lastLeftPt2y = 0;
             //左右分开进行绘制
             for (int j = 0; j < entryCount; j++) {
                 PieEntry entry = dataSet.getEntryForIndex(j);
@@ -175,9 +200,13 @@ public class PieChartRendererFixCover extends PieChartRenderer {
                         pt2x = center.x - radius - 5;
                         if (leftCount > 1) {
                             pt2y = (measuredHeight - topAndBottomSpace / 2) - leftSpace * tempLeftIndex;
+                            if (tempLeftIndex > 0 && lastLeftPt2y - pt2y - lineHeight * 2 < 0) {
+                                pt2y = lastLeftPt2y - lineHeight * 2;
+                            }
                         } else {
                             pt2y = pt1y;
                         }
+                        lastLeftPt2y = (int) pt2y;
                         tempLeftIndex++;
                         println("left pt2y = " + pt2y + ", tempLeftIndex = " + tempLeftIndex);
                         mValuePaint.setTextAlign(Paint.Align.RIGHT);
@@ -189,9 +218,14 @@ public class PieChartRendererFixCover extends PieChartRenderer {
                         pt2x = center.x + radius + 5;
                         if (rightCount > 1) {
                             pt2y = topAndBottomSpace / 2 + rightSpace * tempRightIndex;
+                            //
+                            if (lineHeight *2 + lastRightPt2y - pt2y >= 10) {
+                                pt2y = lineHeight * 2 + lastRightPt2y;
+                            }
                         } else {
                             pt2y = pt1y;
                         }
+                        lastRightPt2y = (int) pt2y;
                         tempRightIndex++;
                         mValuePaint.setTextAlign(Paint.Align.LEFT);
                         if (drawXOutside)
@@ -201,6 +235,9 @@ public class PieChartRendererFixCover extends PieChartRenderer {
                         println("right pt2y = " + pt2y + ", tempRightIndex = " + tempRightIndex);
                     }
                     if (dataSet.getValueLineColor() != ColorTemplate.COLOR_NONE) {
+                        if (line_color_with_pie) {
+                            mValueLinePaint.setColor(colors.get(j % colors.size()));
+                        }
                         c.drawLine(pt0x, pt0y, pt1x, pt1y, mValueLinePaint);
                         c.drawLine(pt1x, pt1y, pt2x, pt2y, mValueLinePaint);
                     }
