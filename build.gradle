@@ -26,7 +26,6 @@ allprojects {
         maven {
             url 'https://dl.google.com/dl/android/maven2/'
         }
-        maven{ url "https://dl.bintray.com/teadoglibrary/MPAndroidChartFix" }
     }
 }
 
